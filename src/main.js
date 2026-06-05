@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'url';
+import crypto from 'crypto';
 import path from 'path';
 import fs from 'fs';
 
@@ -6,6 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const STATE_FILE = path.join(ROOT, 'state.json');
 const STATE_TMP = path.join(ROOT, 'state.tmp.json');
+const LANG_FILE = path.join(__dirname, 'language.json');
 
 
 // ─── CLI Args ─────────────────────────────────────────────────────────────────
@@ -29,17 +31,38 @@ const PING_ROLE = args['ping-role'];
 const REPOSITORY = args['repository'];
 const ERR_WEBHOOK = args['error-webhook'];
 const GITHUB_TOKEN = args['github-token'];
+const LOCALE = args['locale'] || 'en-US';
 
 if (!TOKEN || !WEBHOOK || !GITHUB_TOKEN || !REPOSITORY) {
   console.error('❌  --token, --webhook, --github-token, --repository là bắt buộc.');
   process.exit(1);
-}
+};
 
 
 // ─── Logging ──────────────────────────────────────────────────────────────────
 function log(msg) { console.log(`[${new Date().toISOString()}] ${msg}`); }
 function warn(msg) { console.warn(`[${new Date().toISOString()}] ⚠️  ${msg}`); }
 function error(msg) { console.error(`[${new Date().toISOString()}] ❌  ${msg}`); }
+
+
+// ─── Language Pack Loader ─────────────────────────────────────────────────────
+function loadLanguagePack() {
+  try {
+    if (fs.existsSync(LANG_FILE)) {
+      const allLangs = JSON.parse(fs.readFileSync(LANG_FILE, 'utf8'));
+      return allLangs[LOCALE] || allLangs['en-US'];
+    }
+  } catch (err) { warn(`Không thể đọc file language.json: ${err.message}. Dùng cấu hình dự phòng.`); }
+
+  return {
+    new_quest: "New Quest", quest_info: "Quest Info", duration: "Duration",
+    platforms: "Redeemable Platforms", game: "Game", application: "Application",
+    tasks: "Tasks", task_condition: "User must complete any of the following tasks",
+    rewards: "Rewards", reward_type: "Reward Type", reward_name: "Name",
+    orbs_amount: "Orbs Amount", error_title: "Quest Tracker — Error"
+  };
+}
+const i18n = loadLanguagePack();
 
 
 // ─── State (atomic read/write) ────────────────────────────────────────────────
@@ -58,7 +81,7 @@ function saveState(state) {
   const data = JSON.stringify(state, null, 2);
   fs.writeFileSync(STATE_TMP, data, 'utf8');
   fs.renameSync(STATE_TMP, STATE_FILE);
-}
+};
 
 
 // ─── Discord API ──────────────────────────────────────────────────────────────
@@ -73,7 +96,6 @@ async function fetchQuests() {
       })).toString('base64'),
     },
   });
-
   if (!res.ok) {
     const body = await res.text().catch(() => '');
     throw new Error(`Discord API ${res.status}: ${body}`);
@@ -81,7 +103,7 @@ async function fetchQuests() {
 
   const data = await res.json();
   return data.quests;
-}
+};
 
 
 // ─── Webhook ──────────────────────────────────────────────────────────────────
@@ -98,10 +120,7 @@ async function sendWebhook(url, payload, useComponentsV2 = false) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
-
-  if (!res.ok) {
-    throw new Error(`Webhook ${res.status}: ${await res.text().catch(() => '')}`);
-  }
+  if (!res.ok) throw new Error(`Webhook ${res.status}: ${await res.text().catch(() => '')}`);
 }
 
 async function sendErrorNotice(message) {
@@ -109,17 +128,15 @@ async function sendErrorNotice(message) {
   try {
     await sendWebhook(ERR_WEBHOOK, {
       embeds: [{
-        title: '❌ Quest Tracker — Lỗi',
+        title: `❌ ${i18n.error_title}`,
         description: `\`\`\`\n${String(message).slice(0, 1800)}\n\`\`\``,
         color: 0xE74C3C,
         timestamp: new Date().toISOString(),
         footer: { text: 'Discord Quest Tracker' },
       }],
     });
-  } catch (err) {
-    error(`Không gửi được error webhook: ${err.message}`);
-  }
-}
+  } catch (err) { error(`Không gửi được error webhook: ${err.message}`); }
+};
 
 
 // ─── Embed Builder ────────────────────────────────────────────────────────────
@@ -147,7 +164,7 @@ const getAttachments = async (path) => {
     return response.href;
 
   } catch (err) {
-    error(`Lỗi hệ thống khi lấy ảnh: ${err.message}`);
+    error(`Lỗi hệ thống khi lấy attachments: ${err.message}`);
     return null;
   }
 };
@@ -179,7 +196,6 @@ async function buildQuestEmbed(content, quest, assets) {
 
   const primaryReward = config.rewards_config?.rewards?.[0];
   const rewardName = primaryReward?.messages?.name || "Unknown Reward";
-  const orbAmount = primaryReward?.orb_quantity || 0;
   const skuId = primaryReward?.sku_id || "";
 
   const questName = config.messages?.quest_name || "New Quest";
@@ -193,7 +209,7 @@ async function buildQuestEmbed(content, quest, assets) {
 
   embed.push({
     type: 10,
-    content: `# New Quest - [${questName}](${config.application?.link || 'https://discord.com'})`
+    content: `# ${i18n.new_quest} - [${questName}](${config.application?.link || 'https://discord.com'})`
   }, {
     type: 12,
     items: [{
@@ -204,27 +220,27 @@ async function buildQuestEmbed(content, quest, assets) {
       type: 17,
       components: [{
         type: 10,
-        content: "## Quest Info"
+        content: `## ${i18n.quest_info}`
       }, {
         type: 10,
-        content: `**Duration:** \`${durationStr}\`\n**Redeemable Platforms:** Cross Platform\n**Game:** ${gameTitle} (${gamePublisher})\n**Application:** [${gameTitle.toUpperCase()}](${config.application?.link || '#'}) ( \`${applicationId}\` )\n**Features:** \`QUESTS_CDN\``
+        content: `**${i18n.duration}:** \`${durationStr}\`\n**${i18n.game}:**${gameTitle} (${gamePublisher})\n**${i18n.application}:** [${gameTitle.toUpperCase()}](${config.application?.link || '#'}) ( \`${applicationId}\` )`
       }, {
         type: 14, divider: true, spacing: 1 
       }, {
         type: 10,
-        content: "## Tasks"
+        content: `## ${i18n.tasks}`
       }, {
         type: 10,
-        content: `User must complete any of the following tasks\n${taskList}`
+        content: `${i18n.task_condition}\n${taskList}`
       }, {
         type: 14, divider: true, spacing: 1
       }, {
         type: 9,
         components: [{
-          type: 10, content: "## Rewards" 
+          type: 10, content: `## ${i18n.rewards}`
         }, { 
           type: 10, 
-          content: `**Reward Type:** Virtual Currency\n**SKU ID:** \`${skuId}\`\n**Name:** ${rewardName}\n**Orbs Amount:** ${orbAmount}` 
+          content: `**${i18n.reward_type}:** Virtual Currency\n**SKU ID:** \`${skuId}\`\n**${i18n.reward_name}:** ${rewardName}` 
         }],
         accessory: {
           type: 11, 
