@@ -18,7 +18,6 @@ discord-quest/
 │   ├── discord_quests.webp
 │   ├── discord.webp
 │   ├── empty.png
-│   ├── orbs.png
 │   └── quests.webp
 ├── src/                                    ← Mã nguồn chính
 │   ├── generate-readme.js
