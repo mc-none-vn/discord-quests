@@ -21,7 +21,7 @@ discord-quest/
 │   ├── orbs.png
 │   └── quests.webp
 ├── src/                           ← Mã nguồn chính
-│   ├── generate-readme.js         ← Script tự động cập nhật cấu trúc
+│   ├── generate-readme.js
 │   ├── language.json              ← File cấu hình ngôn ngữ
 │   ├── main.js                    ← Script chạy chính
 │   └── readme_map.json
