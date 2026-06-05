@@ -249,7 +249,7 @@ async function buildQuestEmbed(content, quest, assets) {
         }],
         accessory: {
           type: 11, 
-          media: { url: assets.rewardIconUrl }
+          media: { url: currentRewardIcon }
         }
       }, {
         type: 14, divider: true, spacing: 1
