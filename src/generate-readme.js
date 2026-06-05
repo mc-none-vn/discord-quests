@@ -7,6 +7,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const README_PATH = path.join(ROOT, 'README.md');
 const BLACKLIST = ['node_modules', '.git', '.DS_Store', 'package-lock.json'];
+const COMMENT_MAP = {
+  '.github': '← GitHub Actions config';
+  'assets': '← Assets của hệ thống';
+  'src': '← Mã nguồn chính';
+  'main.js': '← Script chạy chính';
+  'generate-readme.js': '← Script tự động cập nhật cấu trúc';
+  'state.json': '← Lưu trạng thái (Atomic write)';
+};
 
 function buildRawLines(node, prefix = '') {
   let lines = [];
@@ -54,14 +62,7 @@ function generateTreeStructure(tree) {
 
   let result = 'discord-quest/\n';
   rawLines.forEach(line => {
-    let comment = '';
-    if (line.name === '.github') comment = '← 🚀 GitHub Actions config';
-    if (line.name === 'assets') comment = '← 🎨 Assets của hệ thống';
-    if (line.name === 'src') comment = '← ⚙️ Mã nguồn chính';
-    if (line.name === 'main.js') comment = '← 🧪 Script chạy chính';
-    if (line.name === 'generate-readme.js') comment = '← 📂 Script tự động cập nhật cấu trúc';
-    if (line.name === 'state.json') comment = '← 💾 Lưu trạng thái (Atomic write)';
-
+    const comment = COMMENT_MAP[line.name];
     if (comment) {
       const paddingCount = (maxLength - line.fullLineText.length) + 3;
       const spaces = ' '.repeat(paddingCount);
