@@ -199,7 +199,6 @@ async function buildQuestEmbed(content, quest, assets) {
   const primaryReward = config.rewards_config?.rewards?.[0];
   const rewardName = primaryReward?.messages?.name || "Unknown Reward";
   let currentRewardIcon = assets.rewardIconUrl;
-  if (!rewardName.toLowerCase().includes('orb')) currentRewardIcon = primaryReward?.asset || assets.emptyIconUrl;
   const skuId = primaryReward?.sku_id || "";
 
   const questName = config.messages?.quest_name || "New Quest";
@@ -210,6 +209,7 @@ async function buildQuestEmbed(content, quest, assets) {
 
   const CDN_BASE = "https://cdn.discordapp.com/";
   const heroUrl = config.assets?.hero ? `${CDN_BASE}${config.assets.hero}` : assets.discordQuests;
+  if (!rewardName.toLowerCase().includes('orb')) currentRewardIcon = (CDN_BASE + primaryReward?.asset) || assets.emptyIconUrl;
 
   subComponents.push({
     type: 10,
