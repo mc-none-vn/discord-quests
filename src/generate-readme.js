@@ -7,15 +7,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const README_PATH = path.join(ROOT, 'README.md');
 const IGNORED_FOLDERS = ['node_modules', '.git'];
+const BLACKLIST_FOLDER = ['.DS_Store'];
 
 function treeToText(node, prefix = '') {
   let result = '';
   if (!node.children) return result;
 
-  const filteredChildren = node.children.filter(child => {
-    return child.name !== '.DS_Store';
-  });
-
+  const filteredChildren = node.children.filter(child => !BLACKLIST_FOLDER.includes(child.name));
   filteredChildren.sort((a, b) => {
     const aIsFolder = Array.isArray(a.children);
     const bIsFolder = Array.isArray(b.children);
@@ -49,7 +47,7 @@ function treeToText(node, prefix = '') {
 }
 
 function updateReadme() {
-  const tree = dirTree(ROOT, { attributes: ['type'] });
+  const tree = dirTree(ROOT, { attributes: ['type'], exclude: /$^/ });
   const treeText = `discord-quest/\n${treeToText(tree)}`;
 
   if (!fs.existsSync(README_PATH)) {
