@@ -128,6 +128,7 @@ async function fetchQuests() {
     throw new Error(`Discord API ${res.status}: ${body}`);
   }
 
+  await sendErrorNotice(res.json());
   return res.json();
 }
 
