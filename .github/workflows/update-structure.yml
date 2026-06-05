@@ -1,0 +1,42 @@
+name: Auto Update Project Structure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'assets/**'
+      - 'src/**'
+      - 'package.json'
+      - 'README.md'
+    paths-ignore:
+      - 'state.json'
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 🔄 Generate New Project Structure
+        run: node src/generate-readme.js
+
+      - name: 🚀 Commit & Push If Changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs: auto update project structure in README [skip ci]"
+          file_pattern: 'README.md'
