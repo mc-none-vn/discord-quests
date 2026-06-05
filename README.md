@@ -1,5 +1,5 @@
 # Disclaimer
-Công cụ được thiết kế cho việc sử dụng cá nhân bởi bạn và dự án này sử dụng token discord của bạn để hoạt động vì thế chúng tôi sẽ không chịu bất kỳ trách nghiệm nào nếu bạn sử dụng nó và bị ban hay bị hạn chế tài khoản, bạn chịu hoàn toàn trách nghiệm với việc bạn làm
+Công cụ được thiết kế cho việc sử dụng cá nhân bởi bạn và dự án này sử dụng token discord của bạn để hoạt động vì thế chúng tôi sẽ không chịu bất kỳ trách nghiệm nào nếu bạn sử dụng nó và bị ban hay bị hạn chế tài khoản, bạn chịu hoàn toàn trách nghiệm với việc bạn làm.
 
 # 🎯 Discord Quest Tracker
 
