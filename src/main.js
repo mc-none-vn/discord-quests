@@ -198,7 +198,9 @@ async function buildQuestEmbed(content, quest, assets) {
 
   const primaryReward = config.rewards_config?.rewards?.[0];
   const rewardName = primaryReward?.messages?.name || "Unknown Reward";
-  const rewardExpires = `${formatDate(config.rewards_config?.reward_expires_at)}`;
+  let extraReward = ""; if (rewardName.toLowerCase().includes('orb') && primaryReward?.premium_orb_quantity) {
+    extraReward = `\n**${i18n.reward_name.extra}:** ${rewardName.replace(primaryReward?.orb_quantity, primaryReward?.premium_orb_quantity)}`;
+  }; const rewardExpires = `${formatDate(config.rewards_config?.rewards_expire_at)}`;
   let currentRewardIcon = assets.rewardIconUrl;
   const skuId = primaryReward?.sku_id || "";
 
@@ -228,7 +230,7 @@ async function buildQuestEmbed(content, quest, assets) {
     content: `## ${i18n.quest_info}`
   }, {
     type: 10,
-    content: `**${i18n.duration}:** \`${durationStr}\`\n**${i18n.game}:** ${gameTitle} (${gamePublisher})\n**${i18n.application}:** [${gameTitle.toUpperCase()}](${config.application?.link || '#'}) ( \`${applicationId}\` )`
+    content: `**${i18n.duration}:** ${durationStr}\n**${i18n.game}:** ${gameTitle} (${gamePublisher})\n**${i18n.application}:** [${gameTitle.toUpperCase()}](${config.application?.link || '#'}) (\`${applicationId}\`)`
   }, {
     type: 14, divider: true, spacing: 1 
   }, {
@@ -245,7 +247,7 @@ async function buildQuestEmbed(content, quest, assets) {
       type: 10, content: `## ${i18n.rewards}`
     }, { 
       type: 10, 
-      content: `**SKU ID:** \`${skuId}\`\n**${i18n.reward_name}:** ${rewardName}\n**${i18n.reward_expires}:** ${rewardExpires}` 
+      content: `**SKU ID:** \`${skuId}\`\n**${i18n.reward_name.normal}:** ${rewardName}${extraReward}\n**${i18n.reward_expires}:** ${rewardExpires}` 
     }],
     accessory: {
       type: 11, 
