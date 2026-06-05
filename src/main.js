@@ -25,46 +25,15 @@ function parseArgs() {
 const args = parseArgs();
 const TOKEN = args['token'];
 const WEBHOOK = args['webhook'];
-const ERR_WEBHOOK = args['error-webhook'];
 const PING_ROLE = args['ping-role'];
-const LOCALE = args['locale'] ?? 'en';
+const REPOSITORY = args['repository'];
+const ERR_WEBHOOK = args['error-webhook'];
+const GITHUB_TOKEN = args['github-token'];
 
-if (!TOKEN || !WEBHOOK) {
-  console.error('❌  --token và --webhook là bắt buộc.');
+if (!TOKEN || !WEBHOOK || !GITHUB_TOKEN || !REPOSITORY) {
+  console.error('❌  --token, --webhook, --github-token, --repository là bắt buộc.');
   process.exit(1);
 }
-
-
-// ─── i18n ─────────────────────────────────────────────────────────────────────
-const i18n = {
-  vi: {
-    newQuest: '🎯 Quest Mới Xuất Hiện!',
-    reward: '🎁 Phần thưởng',
-    expires: '⏰ Còn lại',
-    game: '🎮 Game',
-    footer: 'Discord Quest Tracker',
-    expired: 'Đã hết hạn',
-    days: (d, h) => `${d} ngày ${h} giờ`,
-    hours: (h, m) => `${h} giờ ${m} phút`,
-    mins: (m) => `${m} phút`,
-    unknown: 'Không xác định',
-    noDesc: '*(không có mô tả)*',
-  },
-  en: {
-    newQuest: '🎯 New Quest Available!',
-    reward: '🎁 Reward',
-    expires: '⏰ Time Left',
-    game: '🎮 Game',
-    footer: 'Discord Quest Tracker',
-    expired: 'Expired',
-    days: (d, h) => `${d}d ${h}h`,
-    hours: (h, m) => `${h}h ${m}m`,
-    mins: (m) => `${m}m`,
-    unknown: 'Unknown',
-    noDesc: '*(no description)*',
-  },
-};
-const t = i18n[LOCALE] ?? i18n.en;
 
 
 // ─── Logging ──────────────────────────────────────────────────────────────────
@@ -79,8 +48,8 @@ function loadState() {
     if (fs.existsSync(STATE_FILE)) {
       return JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'));
     }
-  } catch (e) {
-    warn(`Không đọc được state: ${e.message} — dùng state trống.`);
+  } catch (err) {
+    warn(`Không đọc được state: ${err.message} — dùng state trống.`);
   }
   return { sent_ids: [], last_seen: {}, last_check: null };
 }
@@ -116,8 +85,15 @@ async function fetchQuests() {
 
 
 // ─── Webhook ──────────────────────────────────────────────────────────────────
-async function sendWebhook(url, payload) {
-  const res = await fetch(url, {
+function withComponentsUrl(url) {
+  const u = new URL(url);
+  u.searchParams.set('with_components', 'true');
+  return u.toString();
+}
+
+async function sendWebhook(url, payload, useComponentsV2 = false) {
+  const finalUrl = useComponentsV2 ? withComponentsUrl(url) : url;
+  const res = await fetch(finalUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -137,55 +113,133 @@ async function sendErrorNotice(message) {
         description: `\`\`\`\n${String(message).slice(0, 1800)}\n\`\`\``,
         color: 0xE74C3C,
         timestamp: new Date().toISOString(),
-        footer: { text: t.footer },
+        footer: { text: 'Discord Quest Tracker' },
       }],
     });
-  } catch (e) {
-    error(`Không gửi được error webhook: ${e.message}`);
+  } catch (err) {
+    error(`Không gửi được error webhook: ${err.message}`);
   }
 }
 
 
 // ─── Embed Builder ────────────────────────────────────────────────────────────
-function formatTimeLeft(expiresAt) {
-  const diff = new Date(expiresAt) - Date.now();
-  if (diff <= 0) return t.expired;
+const getAttachments = async (path) => {
+  const githubUrl = `https://api.github.com/repos/${REPOSITORY}/contents/${path}`;
+  try {
+    const response = await fetch(githubUrl, {
+      headers: {
+        'Authorization': `token ${GITHUB_TOKEN}`,
+        'Accept': 'application/vnd.github.v3.raw'
+      }
+    });
+    if (!response.ok) {
+      error(`Không tìm thấy ảnh trên GitHub (Status: ${response.status})`);
+      return null;
+    }
 
-  const d = Math.floor(diff / 86_400_000);
-  const h = Math.floor((diff % 86_400_000) / 3_600_000);
-  const m = Math.floor((diff % 3_600_000) / 60_000);
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const base64Image = buffer.toString('base64');
+    const contentType = path.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg';
+    return `data:${contentType};base64,${base64Image}`;
 
-  if (d > 0) return t.days(d, h);
-  if (h > 0) return t.hours(h, m);
-  return t.mins(m);
-}
-
-function buildQuestEmbed(quest) {
-  const cfg = quest.config ?? {};
-  const msgs = cfg.messages ?? {};
-
-  const name = msgs.quest_name ?? cfg.application_name ?? quest.label ?? t.unknown;
-  const desc = msgs.quest_description ?? t.noDesc;
-  const game = cfg.application_name ?? t.unknown;
-  const reward = cfg.reward_code ?? t.unknown;
-  const expires = cfg.expires_at;
-
-  const fields = [
-    { name: t.game, value: game, inline: true },
-    { name: t.reward, value: reward, inline: true },
-  ];
-
-  if (expires) {
-    fields.push({ name: t.expires, value: formatTimeLeft(expires), inline: true });
+  } catch (err) {
+    error(`Lỗi hệ thống khi lấy ảnh: ${err.message}`);
+    return null;
   }
+};
+
+const formatDate = (isoString) => {
+  if (!isoString) return "";
+  const d = new Date(isoString);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
+async function buildQuestEmbed(content, quest, assets) {
+  const config = quest.config;
+  if (!config) return null;
+
+  const embed = []; if (content) embed.push({ type: 10, content });
+  const durationStr = `${formatDate(config.starts_at)} - ${formatDate(config.expires_at)}`;
+  const taskList = Object.values(config.task_config_v2?.tasks || {}).map(task => {
+    const minutes = task.target ? task.target / 60 : 0;
+    const taskName = task.type
+      .toLowerCase()
+      .replace(/_/g, ' ')
+      .replace(/^\w/, c => c.toUpperCase());
+    
+    return `* ${taskName} (${minutes} minutes)`;
+  }).join('\n');
+
+  const primaryReward = config.rewards_config?.rewards?.[0];
+  const rewardName = primaryReward?.messages?.name || "Unknown Reward";
+  const orbAmount = primaryReward?.orb_quantity || 0;
+  const skuId = primaryReward?.sku_id || "";
+
+  const questName = config.messages?.quest_name || "New Quest";
+  const gameTitle = config.messages?.game_title || "Unknown Game";
+  const gamePublisher = config.messages?.game_publisher || "Unknown Publisher";
+  const applicationId = config.application?.id || "";
+  const questId = quest.id || "";
+
+  const CDN_BASE = "https://cdn.discordapp.com/";
+  const heroUrl = config.assets?.hero ? `${CDN_BASE}${config.assets.hero}` : assets.discordQuests;
+
+  embed.push({
+    type: 10,
+    content: `# New Quest - [${questName}](${config.application?.link || 'https://discord.com'})`
+  }, {
+    type: 12,
+    items: [{
+      media: { url: heroUrl },
+      description: questName
+    }]
+  }, {
+      type: 17,
+      components: [{
+        type: 10,
+        content: "## Quest Info"
+      }, {
+        type: 10,
+        content: `**Duration:** \`${durationStr}\`\n**Redeemable Platforms:** Cross Platform\n**Game:** ${gameTitle} (${gamePublisher})\n**Application:** [${gameTitle.toUpperCase()}](${config.application?.link || '#'}) ( \`${applicationId}\` )\n**Features:** \`QUESTS_CDN\``
+      }, {
+        type: 14, divider: true, spacing: 1 
+      }, {
+        type: 10,
+        content: "## Tasks"
+      }, {
+        type: 10,
+        content: `User must complete any of the following tasks\n${taskList}`
+      }, {
+        type: 14, divider: true, spacing: 1
+      }, {
+        type: 9,
+        components: [{
+          type: 10, content: "## Rewards" 
+        }, { 
+          type: 10, 
+          content: `**Reward Type:** Virtual Currency\n**SKU ID:** \`${skuId}\`\n**Name:** ${rewardName}\n**Orbs Amount:** ${orbAmount}` 
+        }],
+        accessory: {
+          type: 11, 
+          media: { url: assets.rewardIconUrl }
+        }
+      }, {
+        type: 14, divider: true, spacing: 1
+      }, {
+        type: 10,
+        content: `-# Quest ID: \`${questId}\``
+      }]
+  })
 
   return {
-    title: `${t.newQuest}`,
-    description: `**${name}**\n${desc}`,
-    color: 0xF1C40F,
-    fields,
-    footer: { text: `${t.footer} • ID: ${quest.id}` },
-    timestamp: new Date().toISOString(),
+    flags: 1 << 15,
+    username: "Quests",
+    components: embed,
+    avatar_url: assets.avatarWebhook
   };
 }
 
@@ -194,17 +248,16 @@ function buildQuestEmbed(quest) {
 async function main() {
   log('Đang kiểm tra quests...');
   const state = loadState();
-
   let quests;
   try {
     quests = await fetchQuests();
-  } catch (e) {
-    error(`Fetch thất bại: ${e.message}`);
-    await sendErrorNotice(e.message);
+  } catch (err) {
+    error(`Fetch thất bại: ${err.message}`);
+    await sendErrorNotice(err.message);
     process.exit(1);
   }
-  log(`Tìm thấy ${quests.length} quest(s) đang hoạt động.`);
 
+  log(`Tìm thấy ${quests.length} quest(s) đang hoạt động.`);
   const newQuests = quests.filter(q => !state.sent_ids.includes(q.id));
   if (newQuests.length === 0) {
     log('Không có quest mới. Kết thúc.');
@@ -213,14 +266,24 @@ async function main() {
     return;
   }
 
+  log('Đang chuẩn bị tài nguyên hình ảnh từ GitHub...');
+  let avatarWebhook = await getAttachments('assets/quests.webp');
+  if (!avatarWebhook) avatarWebhook = await getAttachments('assets/discord.webp');
+  const rewardIconUrl = await getAttachments('assets/orbs.png');
+  const discordQuests = await getAttachments('assets/discord_quests.webp');
+  const globalAssets = {
+    avatarWebhook,
+    rewardIconUrl,
+    discordQuests
+  };
+
   log(`Phát hiện ${newQuests.length} quest mới — đang gửi thông báo...`);
   for (const quest of newQuests) {
-    log(JSON.stringify(quest));
     try {
-      const embed = buildQuestEmbed(quest);
       const content = PING_ROLE ? `<@&${PING_ROLE}>` : '';
+      const embed = await buildQuestEmbed(content, quest, globalAssets);
 
-      await sendWebhook(WEBHOOK, { content, embeds: [embed] });
+      await sendWebhook(WEBHOOK, embed, true);
       state.sent_ids.push(quest.id);
       state.last_seen[quest.id] = new Date().toISOString();
       saveState(state);
@@ -228,9 +291,9 @@ async function main() {
       log(`✅ Đã gửi: ${quest.id}`);
       await new Promise(r => setTimeout(r, 1100));
 
-    } catch (e) {
-      error(`Gửi quest ${quest.id} thất bại: ${e.message}`);
-      await sendErrorNotice(`Quest ${quest.id}: ${e.message}`);
+    } catch (err) {
+      error(`Gửi quest ${quest.id} thất bại: ${err.message}`);
+      await sendErrorNotice(`Quest ${quest.id}: ${err.message}`);
     }
   }
 
@@ -242,17 +305,14 @@ async function main() {
     if (!activeIds.has(id)) delete state.last_seen[id];
   }
 
-  if (state.sent_ids.length < before) {
-    log(`Đã dọn ${before - state.sent_ids.length} quest hết hạn khỏi state.`);
-  }
-
+  if (state.sent_ids.length < before) log(`Đã dọn ${before - state.sent_ids.length} quest hết hạn khỏi state.`);
   state.last_check = new Date().toISOString();
   saveState(state);
   log('Hoàn tất ✨');
 }
 
-main().catch(async e => {
-  error(e.message);
-  await sendErrorNotice(e.stack ?? e.message);
+main().catch(async err => {
+  error(err.message);
+  await sendErrorNotice(err.stack ?? err.message);
   process.exit(1);
 });
