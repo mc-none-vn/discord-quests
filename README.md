@@ -66,4 +66,4 @@ Nếu lỗi giữa chừng → `state.json` cũ vẫn còn nguyên, không mất
 
 ## Acknowledgements
 Cảm ơn dự án và tài liệu sau đã giúp hoàn thành dự án này:
-- [cc-plugins]([https://github.com/username/repo-a](https://github.com/BachLe2000/cc-plugins/tree/master)
+- [cc-plugins]([https://github.com/username/repo-a](https://github.com/BachLe2000/cc-plugins/tree/master])
