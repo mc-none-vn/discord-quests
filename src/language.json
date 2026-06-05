@@ -13,7 +13,10 @@
     "rewards": "Phần thưởng",
     "platforms": "Nền tảng Nhận thưởng",
     "reward_type": "Loại phần thưởng",
-    "reward_name": "Tên phần thưởng",
+    "reward_name": {
+      "normal": "Tên",
+      "extra": "Với nitro"
+    },
     "reward_expires": "Hạn nhận thưởng",
     "error_title": "Quest Tracker — Lỗi hệ thống"
   },
@@ -31,7 +34,10 @@
     "rewards": "Rewards",
     "platforms": "Redeemable Platforms",
     "reward_type": "Reward Type",
-    "reward_name": "Name",
+    "reward_name": {
+      "normal": "Name",
+      "extra": "With nitro"
+    },
     "reward_expires": "Reward Expires",
     "error_title": "Quest Tracker — Error Notice"
   }
