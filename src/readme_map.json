@@ -4,7 +4,6 @@
   "assets": "← Assets của hệ thống",
   "src": "← Mã nguồn chính",
   "main.js": "← Script chạy chính",
-  "generate-readme.js": "← Script tự động cập nhật cấu trúc",
   "language.json": "← File cấu hình ngôn ngữ",
   "state.json": "← Lưu trạng thái (Atomic write)",
   "THE_END": "--- --- --- --- --- END - THIS - FILE --- --- --- --- ---"
