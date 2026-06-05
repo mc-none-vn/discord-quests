@@ -193,11 +193,12 @@ async function buildQuestEmbed(content, quest, assets) {
     
     return `* ${taskName} (${minutes} minutes)`;
   }).join('\n');
-  const task_condition = config.task_config_v2?.tasks?.join_operator || "or";
+  const task_condition = config.task_config_v2?.join_operator || "or";
 
   const primaryReward = config.rewards_config?.rewards?.[0];
   const rewardName = primaryReward?.messages?.name || "Unknown Reward";
-  if (!rewardName.toLowerCase().includes('orb')) assets.rewardIconUrl = primaryReward?.asset || assets.emptyIconUrl;
+  let currentRewardIcon = assets.rewardIconUrl;
+  if (!rewardName.toLowerCase().includes('orb')) currentRewardIcon = primaryReward?.asset || assets.emptyIconUrl;
   const skuId = primaryReward?.sku_id || "";
 
   const questName = config.messages?.quest_name || "New Quest";
