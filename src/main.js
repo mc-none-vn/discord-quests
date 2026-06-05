@@ -128,7 +128,8 @@ async function fetchQuests() {
     throw new Error(`Discord API ${res.status}: ${body}`);
   }
 
-  return res.json();
+  const data = await res.json();
+  return data.quests;
 }
 
 // ─── Webhook ──────────────────────────────────────────────────────────────────
@@ -217,7 +218,6 @@ async function main() {
   let quests;
   try {
     quests = await fetchQuests();
-    await sendErrorNotice(JSON.stringify(quests));
   } catch (e) {
     error(`Fetch thất bại: ${e.message}`);
     await sendErrorNotice(e.message);
