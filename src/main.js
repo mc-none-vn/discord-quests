@@ -172,10 +172,11 @@ const getAttachments = async (path) => {
 const formatDate = (isoString) => {
   if (!isoString) return "";
   const d = new Date(isoString);
+  const timestamp = Math.floor(d.getTime() / 1000);
   const day = String(d.getDate()).padStart(2, '0');
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const year = d.getFullYear();
-  return `${day}/${month}/${year}`;
+  return `<t:${timestamp}:D>`;
 };
 
 async function buildQuestEmbed(content, quest, assets) {
