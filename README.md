@@ -21,6 +21,7 @@ discord-quest/
 │   └── quests.webp
 ├── src/                           ← Mã nguồn chính
 │   ├── generate-readme.js         ← Script tự động cập nhật cấu trúc
+│   ├── language.json
 │   └── main.js                    ← Script chạy chính
 ├── package.json
 ├── README.md
