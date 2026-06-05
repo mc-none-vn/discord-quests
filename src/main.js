@@ -301,6 +301,7 @@ async function main() {
 
   log(`Phát hiện ${newQuests.length} quest mới — đang gửi thông báo...`);
   for (const quest of newQuests) {
+    log(JSON.stringify(quest));
     try {
       const content = PING_ROLE ? `<@&${PING_ROLE}>` : '';
       const rewards = quest.config.rewards_config?.rewards?.[0]?.messages?.name;
