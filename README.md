@@ -17,6 +17,7 @@ discord-quest/
 ├── assets/                        ← Assets của hệ thống
 │   ├── discord_quests.webp
 │   ├── discord.webp
+│   ├── empty.png
 │   ├── orbs.png
 │   └── quests.webp
 ├── src/                           ← Mã nguồn chính
