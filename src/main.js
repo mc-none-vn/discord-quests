@@ -120,7 +120,7 @@ async function sendWebhook(url, payload, useComponentsV2 = false) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
-  if (!res.ok) console.error(JSON.stringify(res.json()));
+  if (!res.ok) console.error(JSON.stringify(await res.json()));
   if (!res.ok) throw new Error(`Webhook ${res.status}: ${await res.text().catch(() => '')}`);
 }
 
