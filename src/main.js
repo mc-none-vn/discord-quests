@@ -182,7 +182,7 @@ async function buildQuestEmbed(content, quest, assets) {
   const config = quest.config;
   if (!config) return null;
 
-  const embed = []; if (content) embed.push({ type: 10, content });
+  const embed = []; const subComponents = []; if (content) subComponents.push({ type: 10, content });
   const durationStr = `${formatDate(config.starts_at)} - ${formatDate(config.expires_at)}`;
   const taskList = Object.values(config.task_config_v2?.tasks || {}).map(task => {
     const minutes = task.target ? task.target / 60 : 0;
@@ -210,55 +210,56 @@ async function buildQuestEmbed(content, quest, assets) {
   const CDN_BASE = "https://cdn.discordapp.com/";
   const heroUrl = config.assets?.hero ? `${CDN_BASE}${config.assets.hero}` : assets.discordQuests;
 
+  subComponents.push({
+    type: 10,
+    content: `# ${i18n.new_quest} - [${questName}](${config.application?.link || 'https://discord.com'})`
+  }, {
+    type: 12,
+    items: [{
+      media: { url: heroUrl },
+      description: questName
+    }]
+  }, {
+    type: 14, divider: true, spacing: 1 
+  }, {
+    type: 10,
+    content: `## ${i18n.quest_info}`
+  }, {
+    type: 10,
+    content: `**${i18n.duration}:** \`${durationStr}\`\n**${i18n.game}:** ${gameTitle} (${gamePublisher})\n**${i18n.application}:** [${gameTitle.toUpperCase()}](${config.application?.link || '#'}) ( \`${applicationId}\` )`
+  }, {
+    type: 14, divider: true, spacing: 1 
+  }, {
+    type: 10,
+    content: `## ${i18n.tasks}`
+  }, {
+    type: 10,
+    content: `${i18n.task_condition[task_condition]}\n${taskList}`
+  }, {
+    type: 14, divider: true, spacing: 1
+  }, {
+    type: 9,
+    components: [{
+      type: 10, content: `## ${i18n.rewards}`
+    }, { 
+      type: 10, 
+      content: `**SKU ID:** \`${skuId}\`\n**${i18n.reward_name}:** ${rewardName}` 
+    }],
+    accessory: {
+      type: 11, 
+      media: { url: currentRewardIcon }
+    }
+  }, {
+    type: 14, divider: true, spacing: 1
+  }, {
+    type: 10,
+    content: `Quest ID: \`${questId}\``
+  });
+
   embed.push({
       type: 17,
-      components: [{
-        type: 10,
-        content: `# ${i18n.new_quest} - [${questName}](${config.application?.link || 'https://discord.com'})`
-      }, {
-        type: 12,
-        items: [{
-          media: { url: heroUrl },
-          description: questName
-        }]
-      }, {
-        type: 14, divider: true, spacing: 1 
-      }, {
-        type: 10,
-        content: `## ${i18n.quest_info}`
-      }, {
-        type: 10,
-        content: `**${i18n.duration}:** \`${durationStr}\`\n**${i18n.game}:** ${gameTitle} (${gamePublisher})\n**${i18n.application}:** [${gameTitle.toUpperCase()}](${config.application?.link || '#'}) ( \`${applicationId}\` )`
-      }, {
-        type: 14, divider: true, spacing: 1 
-      }, {
-        type: 10,
-        content: `## ${i18n.tasks}`
-      }, {
-        type: 10,
-        content: `${i18n.task_condition[task_condition]}\n${taskList}`
-      }, {
-        type: 14, divider: true, spacing: 1
-      }, {
-        type: 9,
-        components: [{
-          type: 10, content: `## ${i18n.rewards}`
-        }, { 
-          type: 10, 
-          content: `**SKU ID:** \`${skuId}\`\n**${i18n.reward_name}:** ${rewardName}` 
-        }],
-        accessory: {
-          type: 11, 
-          media: { url: currentRewardIcon }
-        }
-      }, {
-        type: 14, divider: true, spacing: 1
-      }, {
-        type: 10,
-        content: `Quest ID: \`${questId}\``
-      }]
-  })
-
+      components: subComponents
+  });
   return {
     flags: 1 << 15,
     username: "Quests",
