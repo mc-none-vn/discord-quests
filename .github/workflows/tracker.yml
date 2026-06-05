@@ -1,9 +1,9 @@
 name: Discord Quest Tracker
 
 on:
-  workflow_dispatch:   # chạy thủ công khi cần
+  workflow_dispatch:
   schedule:
-    - cron: "*/5 * * * *"   # mỗi 5 phút
+    - cron: "*/5 * * * *"
 
 permissions:
   contents: write
@@ -24,15 +24,15 @@ jobs:
       - name: 🎯 Run Quest Tracker
         run: |
           node src/main.js \
-            --token         "${{ secrets.DISCORD_TOKEN }}" \
-            --webhook       "${{ secrets.MAIN_WEBHOOK }}" \
+            --token "${{ secrets.DISCORD_TOKEN }}" \
+            --webhook "${{ secrets.MAIN_WEBHOOK }}" \
             --error-webhook "${{ secrets.ERROR_WEBHOOK }}" \
-            --ping-role     "${{ secrets.PING_ROLE_ID }}" \
-            --locale        vi
+            --ping-role "${{ secrets.PING_ROLE_ID }}" \
+            --locale vi
 
       - name: 💾 Commit state
         run: |
-          git config --global user.name  "quest-tracker[bot]"
+          git config --global user.name "quest-tracker[bot]"
           git config --global user.email "quest-tracker@users.noreply.github.com"
           git add state.json
           git diff --cached --quiet || git commit -m "chore: update quest state [skip ci]"
