@@ -58,7 +58,7 @@ function loadLanguagePack() {
     new_quest: "New Quest", quest_info: "Quest Info", duration: "Duration",
     platforms: "Redeemable Platforms", game: "Game", application: "Application",
     tasks: "Tasks", task_condition: "User must complete any of the following tasks",
-    rewards: "Rewards", reward_type: "Reward Type", reward_name: "Name",
+    rewards: "Rewards", reward_type: "Reward Type", reward_name: "Name", reward_expires: "Reward Expires",
     orbs_amount: "Orbs Amount", error_title: "Quest Tracker — Error"
   };
 }
@@ -176,7 +176,7 @@ const formatDate = (isoString) => {
   const day = String(d.getDate()).padStart(2, '0');
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const year = d.getFullYear();
-  return `<t:${timestamp}:D>`;
+  return `<t:${timestamp}>`;
 };
 
 async function buildQuestEmbed(content, quest, assets) {
@@ -198,6 +198,7 @@ async function buildQuestEmbed(content, quest, assets) {
 
   const primaryReward = config.rewards_config?.rewards?.[0];
   const rewardName = primaryReward?.messages?.name || "Unknown Reward";
+  const rewardExpires = `${formatDate(config.rewards_config?.reward_expires_at)}`;
   let currentRewardIcon = assets.rewardIconUrl;
   const skuId = primaryReward?.sku_id || "";
 
@@ -244,7 +245,7 @@ async function buildQuestEmbed(content, quest, assets) {
       type: 10, content: `## ${i18n.rewards}`
     }, { 
       type: 10, 
-      content: `**SKU ID:** \`${skuId}\`\n**${i18n.reward_name}:** ${rewardName}` 
+      content: `**SKU ID:** \`${skuId}\`\n**${i18n.reward_name}:** ${rewardName}\n**${i18n.reward_expires}:** ${rewardExpires}` 
     }],
     accessory: {
       type: 11, 
