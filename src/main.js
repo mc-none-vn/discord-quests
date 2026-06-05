@@ -5,7 +5,7 @@ import fs from 'fs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const STATE_FILE = path.join(ROOT, 'state.json');
-const STATE_TMP  = path.join(ROOT, 'state.tmp.json');
+const STATE_TMP = path.join(ROOT, 'state.tmp.json');
 
 
 // ─── CLI Args ─────────────────────────────────────────────────────────────────
@@ -46,7 +46,7 @@ const i18n = {
     expired: 'Đã hết hạn',
     days: (d, h) => `${d} ngày ${h} giờ`,
     hours: (h, m) => `${h} giờ ${m} phút`,
-    mins: (m)    => `${m} phút`,
+    mins: (m) => `${m} phút`,
     unknown: 'Không xác định',
     noDesc: '*(không có mô tả)*',
   },
@@ -59,7 +59,7 @@ const i18n = {
     expired: 'Expired',
     days: (d, h) => `${d}d ${h}h`,
     hours: (h, m) => `${h}h ${m}m`,
-    mins: (m)    => `${m}m`,
+    mins: (m) => `${m}m`,
     unknown: 'Unknown',
     noDesc: '*(no description)*',
   },
@@ -215,7 +215,7 @@ async function main() {
 
   log(`Phát hiện ${newQuests.length} quest mới — đang gửi thông báo...`);
   for (const quest of newQuests) {
-    log(quest);
+    log(JSON.stringify(quest));
     try {
       const embed = buildQuestEmbed(quest);
       const content = PING_ROLE ? `<@&${PING_ROLE}>` : '';
