@@ -11,6 +11,8 @@
       "and": "Người dùng phải hoàn thành tất cả nhiệm vụ dưới đây"
     },
     "rewards": "Phần thưởng",
+    "platforms": "Nền tảng Nhận thưởng",
+    "reward_type": "Loại phần thưởng",
     "reward_name": "Tên phần thưởng",
     "reward_expires": "Hạn nhận thưởng",
     "error_title": "Quest Tracker — Lỗi hệ thống"
@@ -27,6 +29,8 @@
       "and": "User must complete all of the following tasks"
     },
     "rewards": "Rewards",
+    "platforms": "Redeemable Platforms",
+    "reward_type": "Reward Type",
     "reward_name": "Name",
     "reward_expires": "Reward Expires",
     "error_title": "Quest Tracker — Error Notice"
