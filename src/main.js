@@ -197,6 +197,7 @@ async function buildQuestEmbed(content, quest, assets) {
 
   const primaryReward = config.rewards_config?.rewards?.[0];
   const rewardName = primaryReward?.messages?.name || "Unknown Reward";
+  if (!rewardName.toLowerCase().includes('orb')) assets.rewardIconUrl = primaryReward?.asset || assets.emptyIconUrl;
   const skuId = primaryReward?.sku_id || "";
 
   const questName = config.messages?.quest_name || "New Quest";
@@ -292,20 +293,19 @@ async function main() {
   let avatarWebhook = await getAttachments('assets/quests.webp');
   if (!avatarWebhook) avatarWebhook = await getAttachments('assets/discord.webp');
   const rewardIconUrl = await getAttachments('assets/orbs.png');
+  const emptyIconUrl = await getAttachments('assets/empty.png');
   const discordQuests = await getAttachments('assets/discord_quests.webp');
   const globalAssets = {
     avatarWebhook,
     rewardIconUrl,
+    emptyIconUrl,
     discordQuests
   };
 
   log(`Phát hiện ${newQuests.length} quest mới — đang gửi thông báo...`);
   for (const quest of newQuests) {
-    console.log(JSON.stringify(quest));
     try {
       const content = PING_ROLE ? `<@&${PING_ROLE}>` : '';
-      const rewards = quest.config.rewards_config?.rewards?.[0]?.messages?.name;
-      if (rewards) if (!rewards.toLowerCase().includes('orb')) globalAssets.rewardIconUrl = await getAttachments('assets/empty.png');;
       const embed = await buildQuestEmbed(content, quest, globalAssets);
 
       await sendWebhook(WEBHOOK, embed, true);
