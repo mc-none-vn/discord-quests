@@ -226,7 +226,7 @@ async function buildQuestEmbed(content, quest, assets) {
         content: `## ${i18n.quest_info}`
       }, {
         type: 10,
-        content: `**${i18n.duration}:** \`${durationStr}\`\n**${i18n.game}:**${gameTitle} (${gamePublisher})\n**${i18n.application}:** [${gameTitle.toUpperCase()}](${config.application?.link || '#'}) ( \`${applicationId}\` )`
+        content: `**${i18n.duration}:** \`${durationStr}\`\n**${i18n.game}:** ${gameTitle} (${gamePublisher})\n**${i18n.application}:** [${gameTitle.toUpperCase()}](${config.application?.link || '#'}) ( \`${applicationId}\` )`
       }, {
         type: 14, divider: true, spacing: 1 
       }, {
@@ -253,7 +253,7 @@ async function buildQuestEmbed(content, quest, assets) {
         type: 14, divider: true, spacing: 1
       }, {
         type: 10,
-        content: `-# Quest ID: \`${questId}\``
+        content: `Quest ID: \`${questId}\``
       }]
   })
 
@@ -303,6 +303,8 @@ async function main() {
   for (const quest of newQuests) {
     try {
       const content = PING_ROLE ? `<@&${PING_ROLE}>` : '';
+      const rewards = quest.config.rewards_config?.rewards?.[0]?.messages?.name;
+      if (rewards) if (!rewards.toLowerCase().includes('orb')) globalAssets.rewardIconUrl = await getAttachments('assets/empty.png');;
       const embed = await buildQuestEmbed(content, quest, globalAssets);
 
       await sendWebhook(WEBHOOK, embed, true);
