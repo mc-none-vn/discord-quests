@@ -4,12 +4,8 @@ on:
   push:
     branches:
       - main
-    paths:
-      - '.github/**'
-      - 'assets/**'
-      - 'src/**'
-      - 'package.json'
-      - 'README.md'
+    paths-ignore:
+      - 'state.json'
 
 permissions:
   contents: write
