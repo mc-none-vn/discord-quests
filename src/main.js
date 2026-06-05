@@ -112,7 +112,7 @@ function saveState(state) {
 // ─── Discord API ──────────────────────────────────────────────────────────────
 
 async function fetchQuests() {
-  const res = await fetch('https://discord.com/api/v9/users/@me/quests', {
+  const res = await fetch('https://discord.com/api/v9/quests/@me', {
     headers: {
       Authorization:   TOKEN,
       'Content-Type':  'application/json',
