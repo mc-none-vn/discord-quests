@@ -15,7 +15,7 @@
     "reward_type": "Loại phần thưởng",
     "reward_name": {
       "normal": "Tên",
-      "extra": "Với nitro"
+      "extra": "Có nitro"
     },
     "reward_expires": "Hạn nhận thưởng",
     "error_title": "Quest Tracker — Lỗi hệ thống"
@@ -36,9 +36,9 @@
     "reward_type": "Reward Type",
     "reward_name": {
       "normal": "Name",
-      "extra": "With nitro"
+      "extra": "Nitro"
     },
-    "reward_expires": "Reward Expires",
+    "reward_expires": "Expires",
     "error_title": "Quest Tracker — Error Notice"
   }
 }
