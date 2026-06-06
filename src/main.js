@@ -315,7 +315,7 @@ async function buildQuestEmbed(content, quest, assets) {
     });
     return {
         flags: 1 << 15,
-        username: "Discord Quests",
+        username: "Quests Tracker",
         components: embed,
         avatar_url: assets.avatarWebhook
     };
