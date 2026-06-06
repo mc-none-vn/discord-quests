@@ -14,22 +14,22 @@ discord-quest/
 │   └── workflows/
 │       ├── tracker.yml
 │       └── update-structure.yml
-├── assets/                        ← Assets của hệ thống
+├── assets/                        ← Assets of system
 │   ├── discord_quests.webp
 │   ├── discord.webp
 │   ├── empty.png
 │   ├── orbs.png
 │   └── quests.png
-├── src/                           ← Mã nguồn chính
-│   ├── languages/                 ← Cấu hình ngôn ngữ
+├── src/                           ← Main
+│   ├── languages/                 ← Language config
 │   │   ├── en-US.json
 │   │   └── vi-VN.json
 │   ├── generate-readme.js
-│   ├── main.js                    ← Script chạy chính
+│   ├── main.js                    ← Main script
 │   └── readme_map.json
 ├── package.json
 ├── README.md
-└── state.json                     ← Lưu trạng thái (Atomic write)
+└── state.json                     ← Atomic write
 ```
 <!-- END_METADATA_DISCORD_QUEST_TREE -->
 
