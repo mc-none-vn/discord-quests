@@ -56,6 +56,7 @@ function loadLanguagePack() {
 
   return {
     "new_quest": "New Quest",
+    "quest_id": "Quest ID",
     "quest_info": "Quest Info",
     "duration": "Duration",
     "game": "Game",
@@ -66,6 +67,10 @@ function loadLanguagePack() {
       "and": "User must complete all of the following tasks"
     },
     "rewards": "Rewards",
+    "sku_id": "SKU ID",
+    "sku": {
+      "1287881739531976815": "Virtual Currency"
+    },
     "platforms": "Redeemable Platforms",
     "reward_type": "Reward Type",
     "reward_name": {
@@ -73,9 +78,15 @@ function loadLanguagePack() {
       "extra": "Nitro"
     },
     "reward_expires": "Expires",
-    "error_title": "Quest Tracker — Error Notice"
+    "error_title": "Quest Tracker — Error Notice",
+    "error": {
+      "new_quest": "*Unknown quest*",
+      "game_name": "*Unknown game*",
+      "game_publisher": "*Unknown publisher*",
+      "reward": "*Unknown reward*",
+      "sku": "*Unknown type*"
+    }
   }
-}
 const i18n = loadLanguagePack();
 
 
@@ -211,7 +222,7 @@ async function buildQuestEmbed(content, quest, assets) {
   const task_condition = config.task_config_v2?.join_operator || "or";
 
   const primaryReward = config.rewards_config?.rewards?.[0];
-  const rewardName = primaryReward?.messages?.name || "Unknown Reward";
+  const rewardName = primaryReward?.messages?.name || i18n.error.reward;
   let extraReward = ""; if (String(rewardName).toLowerCase().includes('orb') && primaryReward?.premium_orb_quantity) {
     const normalQty = String(primaryReward?.orb_quantity || '');
     const premiumQty = String(primaryReward?.premium_orb_quantity || '');
@@ -219,12 +230,13 @@ async function buildQuestEmbed(content, quest, assets) {
   }; const rewardExpires = `${formatDate(config.rewards_config?.rewards_expire_at)}`;
   let currentRewardIcon = assets.rewardIconUrl;
   const skuId = primaryReward?.sku_id || "";
+  const rewardType = i18n.sku[skuId] || i18n.error.sku;
 
-  const questName = config.messages?.quest_name || "New Quest";
-  const gameTitle = config.messages?.game_title || "Unknown Game";
-  const gamePublisher = config.messages?.game_publisher || "Unknown Publisher";
+  const questName = config.messages?.quest_name || i18n.error.new_quest;
+  const gameTitle = config.messages?.game_title || i18n.error.game_name;
+  const gamePublisher = config.messages?.game_publisher || i18n.error.game_publisher;
 
-  const applicationLink = config.application?.link || 'https://discord.com';
+  const applicationLink = config.application?.link || "https://discord.com/";
   const applicationName = config.application?.name || "";
   const applicationId = config.application?.id || "";
   const questId = quest.id || "";
@@ -266,7 +278,7 @@ async function buildQuestEmbed(content, quest, assets) {
       type: 10, content: `## ${i18n.rewards}`
     }, { 
       type: 10, 
-      content: `**${i18n.reward_name.normal}:** ${rewardName}${extraReward}\n**${i18n.sku_id}:** \`${skuId}\`\n**${i18n.reward_expires}:** ${rewardExpires}` 
+      content: `**${i18n.reward_type}:** ${rewardType}\n**${i18n.sku_id}:** \`${skuId}\`\n**${i18n.reward_name.normal}:** ${rewardName}${extraReward}\n**${i18n.reward_expires}:** ${rewardExpires}` 
     }],
     accessory: {
       type: 11, 
@@ -285,7 +297,7 @@ async function buildQuestEmbed(content, quest, assets) {
   });
   return {
     flags: 1 << 15,
-    username: "Quests",
+    username: "Discord Quests",
     components: embed,
     avatar_url: assets.avatarWebhook
   };
