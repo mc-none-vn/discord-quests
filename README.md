@@ -21,7 +21,7 @@ discord-quest/
 │   ├── orbs.png
 │   └── quests.png
 ├── src/                           ← Mã nguồn chính
-│   ├── languages/
+│   ├── languages/                 ← Cấu hình ngôn ngữ
 │   │   ├── en-US.json
 │   │   └── vi-VN.json
 │   ├── generate-readme.js
