@@ -50,7 +50,7 @@ discord-quest/
 
 | Variable | Decriptions | value examples |
 |----------|-------|---------------|
-| `LOCALE` | Language display titles/information of Quest | `vi`, `en-US`, `ja`, `zh-CN` |
+| `LOCALE` | Language display titles/information of Quest | `vi-VN`, `en-US`, `zh-CN` |
 | `PING_ROLE_ID` | ID role Discord you want to ping when it find a quest | fill with ID Role (or empty) |
 
 ### 2. Turn on GitHub Actions
