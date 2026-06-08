@@ -34,7 +34,7 @@ jobs:
 
       - name: 💾 Commit state
         run: |
-          git config --global user.name "quest-tracker[bot]"
+          git config --global user.name "quest-tracker [bot]"
           git config --global user.email "quest-tracker@users.noreply.github.com"
           git add state.json
           git diff --cached --quiet || git commit -m "chore: update quest state [skip ci]"
