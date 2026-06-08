@@ -15,7 +15,7 @@ Discord-quest just created for use by yourself and this project using your token
 discord-quest/
 ├── .github/                      ← GitHub Actions config
 │   └── workflows/
-│       ├── tracker.yml
+│       ├── questsTracker.yml
 │       └── updateStructure.yml
 ├── assets/                       ← Assets of system
 │   ├── acknowledgements.png
