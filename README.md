@@ -12,7 +12,33 @@ Discord-quest just created for use by yourself and this project using your token
 ## <div align="left"><sub><img src="assets/projectStructure.png" height="30"></sub> Project Structure </div>
 <!-- START_METADATA_DISCORD_QUEST_TREE -->
 ```
-
+discord-quest/
+├── .github/                       ← GitHub Actions config
+│   └── workflows/
+│       ├── tracker.yml
+│       └── update-structure.yml
+├── assets/                        ← Assets of system
+│   ├── acknowledgements.png
+│   ├── disclaimer.png
+│   ├── discord.png
+│   ├── discordQuests.png
+│   ├── empty.png
+│   ├── file.png
+│   ├── install.webp
+│   ├── orbs.png
+│   ├── projectStructure.png
+│   ├── quests.png
+│   └── settings.webp
+├── src/                           ← Main
+│   ├── languages/                 ← Language config
+│   │   ├── en-US.json
+│   │   └── vi-VN.json
+│   ├── generate-readme.js
+│   ├── main.js                    ← Main script
+│   └── readme_map.json
+├── package.json
+├── README.md
+└── state.json                     ← Atomic write
 ```
 <!-- END_METADATA_DISCORD_QUEST_TREE -->
 
