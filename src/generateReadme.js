@@ -6,7 +6,7 @@ import fs from 'fs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const README_PATH = path.join(ROOT, 'README.md');
-const BLACKLIST = [];
+const BLACKLIST = ['node_modules', '.git'];
 const COMMENT_MAP_FILE = path.join(__dirname, 'readmeMap.json'); let COMMENT_MAP = [];
 if (fs.existsSync(COMMENT_MAP_FILE)) COMMENT_MAP = JSON.parse(fs.readFileSync(COMMENT_MAP_FILE, 'utf8'));
 
