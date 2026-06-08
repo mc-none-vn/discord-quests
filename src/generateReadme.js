@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const README_PATH = path.join(ROOT, 'README.md');
 const BLACKLIST = ['node_modules', '.git', '.DS_Store', 'package-lock.json'];
-const COMMENT_MAP_FILE = path.join(__dirname, 'readme_map.json'); let COMMENT_MAP = [];
+const COMMENT_MAP_FILE = path.join(__dirname, 'readmeMap.json'); let COMMENT_MAP = [];
 if (fs.existsSync(COMMENT_MAP_FILE)) COMMENT_MAP = JSON.parse(fs.readFileSync(COMMENT_MAP_FILE, 'utf8'));
 
 function buildRawLines(node, prefix = '') {
