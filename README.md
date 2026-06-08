@@ -60,16 +60,16 @@ discord-quest/
 
 ```
 Every 5 minutes
-    ↓
+      ↓
 Fetch /quests/@me from Discord API
-    ↓
+      ↓
 Compare with state.json
-    ↓
+      ↓
 When it has found new quest → Send embed using webhook
-              → Ping role (if so)
-              → Save ID in state.json (atomic)
+                            → Ping role (if so)
+                            → Save ID in state.json (atomic)
 When it hasn't found → End
-    ↓
+      ↓
 Commit state.json to repo
 ```
 
