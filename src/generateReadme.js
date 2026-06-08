@@ -20,7 +20,9 @@ function buildRawLines(node, prefix = '') {
         const bIsFolder = Array.isArray(b.children);
         if (aIsFolder && !bIsFolder) return -1;
         if (!aIsFolder && bIsFolder) return 1;
-        return a.name.localeCompare(b.name, 'en', { sensitivity: 'base' });
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
     });
 
     filteredChildren.forEach((child, index) => {
