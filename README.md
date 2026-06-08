@@ -79,5 +79,4 @@ Those files will be manage by bot. You can:
 Thank for this source give our a idea to create this repository:
 - [cc-plugins](https://github.com/BachLe2000/cc-plugins/tree/master)
 
-
-#### <div align="center">© 2026 Mc's Team. All rights reserved.</div>
+#### <footer><div align="center">© 2026 Mc's Team. All rights reserved.</div></footer>
