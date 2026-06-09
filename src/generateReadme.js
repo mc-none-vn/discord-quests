@@ -5,14 +5,14 @@ import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
-
 const README_TEMPLATE_PATH = path.join(__dirname, 'README.md'); 
 const README_OUTPUT_PATH = path.join(ROOT, 'README.md');
-
 const BLACKLIST = ['node_modules', '.git'];
 const COMMENT_MAP_FILE = path.join(__dirname, 'readmeMap.json'); let COMMENT_MAP = [];
 if (fs.existsSync(COMMENT_MAP_FILE)) COMMENT_MAP = JSON.parse(fs.readFileSync(COMMENT_MAP_FILE, 'utf8'));
 
+
+// ─── Tree Structure Builder ───────────────────────────────────────────────────
 function buildRawLines(node, prefix = '') {
     let lines = []; if (!node.children) return lines;
 
@@ -67,6 +67,8 @@ function generateTreeStructure(tree) {
     return result;
 }
 
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
 function updateReadme() {
     if (!fs.existsSync(README_TEMPLATE_PATH)) {
         console.error('❌ Không tìm thấy file template README.md tại thư mục src/'); return;
