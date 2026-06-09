@@ -72,24 +72,22 @@ function updateReadme() {
         console.error('❌ Không tìm thấy file template README.md tại thư mục src/'); return;
     }; let readmeContent = fs.readFileSync(README_TEMPLATE_PATH, 'utf8');
     const githubRepository = process.env.GITHUB_REPOSITORY || 'mc-none-vn/discord-quest';
-
     const tree = dirTree(ROOT, { attributes: ['type'], exclude: /$^/ });
+
     const treeText = generateTreeStructure(tree);
     const startTag = '<!-- START_METADATA_DISCORD_QUEST_TREE -->';
     const endTag = '<!-- END_METADATA_DISCORD_QUEST_TREE -->';
     const regex = new RegExp(`${startTag}[\\s\\S]*?${endTag}`);
     const newTreeBlock = `${startTag}\n\`\`\`\n${treeText}\`\`\`\n${endTag}`;
+    if (readmeContent.match(regex)) {
+        readmeContent = readmeContent.replace(regex, newTreeBlock);
+        console.log('✅ Đã tự động căn lề dựa theo file dài nhất thành công!');
+    } else console.error('❌ Thất bại: Không tìm thấy các thẻ đánh dấu trong README.md');
 
     readmeContent = readmeContent.replace(/\${{\s*github\.repository\s*}}/g, githubRepository);
     readmeContent = readmeContent.replace(/\${{\s*github\.repository.name\s*}}/g, githubRepository.split('/')[1]);
 
-    if (readmeContent.match(regex)) {
-        readmeContent = readmeContent.replace(regex, newTreeBlock);
-        fs.writeFileSync(README_OUTPUT_PATH, readmeContent, 'utf8');
-        console.log('✅ Đã tự động căn lề dựa theo file dài nhất thành công!');
-    } else {
-        console.error('❌ Thất bại: Không tìm thấy các thẻ đánh dấu trong README.md');
-    }
+    fs.writeFileSync(README_OUTPUT_PATH, readmeContent, 'utf8');
 }
 
 updateReadme();
