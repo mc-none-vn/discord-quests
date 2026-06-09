@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- ![Discord Quests Tracker Background][background] -->
-# <sub><img src="https://raw.githubusercontent.com/mc-none-vn/discord-quests/refs/heads/assets/quests.png" height="41"></sub> Discord Quest Tracker <sub><img src="https://raw.githubusercontent.com/mc-none-vn/discord-quests/refs/heads/assets/quests.png" height="41"></sub>
+# <sub><img src="https://raw.githubusercontent.com/mc-none-vn/discord-quests/refs/heads/assets/quests.png" height="41"></sub> Discord Quests Tracker <sub><img src="https://raw.githubusercontent.com/mc-none-vn/discord-quests/refs/heads/assets/quests.png" height="41"></sub>
 Automatically tracking Discord Quests then sending notifications to a webhook every 5 minutes only when **a new quest is found**.
 
 </div>
