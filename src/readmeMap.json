@@ -1,7 +1,7 @@
 {
     "START": "--- --- --- --- --- START - THIS - FILE --- --- --- --- ---",
     ".github": "← GitHub Actions config",
-    "src": "← Main",
+    "src": "← Main folder",
     "languages": "← Language config",
     "main.js": "← Main script",
     "state.json": "← Atomic write",
