@@ -176,7 +176,7 @@ async function sendErrorNotice(message) {
 
 // ─── Embed Builder ────────────────────────────────────────────────────────────
 const getAttachments = async (path) => {
-    const githubUrl = `https://raw.githubusercontent.com/${REPOSITORY}/refs/heads/main/${path}`;
+    const githubUrl = `https://raw.githubusercontent.com/${REPOSITORY}/refs/heads/assets/${path}`;
     try {
         // const response = await fetch(githubUrl, {
         //   headers: {
@@ -366,11 +366,11 @@ async function main() {
         log('Không có quest mới. Tiến hành dọn state hết hạn.');
     } else {
         log('Đang chuẩn bị tài nguyên hình ảnh từ GitHub...');
-        let avatarWebhook = await getAttachments('assets/quests.png');
-        if (!avatarWebhook) avatarWebhook = await getAttachments('assets/discord.webp');
-        const rewardIconUrl = await getAttachments('assets/orbs.png');
-        const emptyIconUrl = await getAttachments('assets/empty.png');
-        const discordQuests = await getAttachments('assets/discord_quests.webp');
+        let avatarWebhook = await getAttachments('quests.png');
+        if (!avatarWebhook) avatarWebhook = await getAttachments('discord.webp');
+        const rewardIconUrl = await getAttachments('orbs.png');
+        const emptyIconUrl = await getAttachments('empty.png');
+        const discordQuests = await getAttachments('discord_quests.webp');
         const globalAssets = { avatarWebhook, rewardIconUrl, emptyIconUrl, discordQuests };
 
         log(`Phát hiện ${newQuests.length} quest mới — đang gửi thông báo...`);
