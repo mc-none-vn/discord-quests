@@ -5,7 +5,7 @@ import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
-const README_TEMPLATE_PATH = path.join(__dirname, 'README.md'); 
+const README_TEMPLATE_PATH = path.join(__dirname, 'readmeSource.md'); 
 const README_OUTPUT_PATH = path.join(ROOT, 'README.md');
 const BLACKLIST = ['node_modules', '.git'];
 const COMMENT_MAP_FILE = path.join(__dirname, 'readmeMap.json'); let COMMENT_MAP = [];
