@@ -17,7 +17,7 @@ discord-quest/
 │   └── workflows/
 │       ├── questsTracker.yml
 │       └── updateStructure.yml
-├── assets/                       ← Assets of system
+├── assets/
 │   ├── acknowledgements.png
 │   ├── discord.png
 │   ├── discordQuests.png
