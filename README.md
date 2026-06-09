@@ -17,17 +17,6 @@ discord-quest/
 │   └── workflows/
 │       ├── questsTracker.yml
 │       └── updateStructure.yml
-├── assets/
-│   ├── acknowledgements.png
-│   ├── discord.png
-│   ├── discordQuests.png
-│   ├── empty.png
-│   ├── file.png
-│   ├── install.webp
-│   ├── orbs.png
-│   ├── projectStructure.png
-│   ├── quests.png
-│   └── settings.webp
 ├── src/                          ← Main
 │   ├── languages/                ← Language config
 │   │   ├── en-US.json
