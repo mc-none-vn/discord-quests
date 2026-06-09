@@ -12,7 +12,7 @@ Automatically tracking Discord Quests then sending notifications to a webhook ev
 ## <div align="left"><sub><img src="https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/assets/projectStructure.png" height="30"></sub> Project Structure </div>
 <!-- START_METADATA_DISCORD_QUEST_TREE -->
 ```
-P R O J E C T     S T R U C T U R E
+The  project  structure  will  be  automatically  generated  here.
 ```
 <!-- END_METADATA_DISCORD_QUEST_TREE -->
 
