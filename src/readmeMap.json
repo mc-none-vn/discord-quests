@@ -1,10 +1,9 @@
 {
     "START": "--- --- --- --- --- START - THIS - FILE --- --- --- --- ---",
     ".github": "← GitHub Actions config",
-    "assets": "← Assets of system",
     "src": "← Main",
-    "main.js": "← Main script",
     "languages": "← Language config",
+    "main.js": "← Main script",
     "state.json": "← Atomic write",
     "THE_END": "--- --- --- --- --- END - THIS - FILE --- --- --- --- ---"
 }
