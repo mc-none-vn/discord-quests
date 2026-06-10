@@ -26,6 +26,7 @@ discord-quests/
 │   ├── readmeMap.json
 │   └── readmeSource.md
 ├── LICENSE
+├── README.md
 ├── package-lock.json
 ├── package.json
 └── state.json                    ← Atomic write
