@@ -1,5 +1,5 @@
 // ─── Webhook ──────────────────────────────────────────────────────────────────
-import { ERR_WEBHOOK } from './main.js'
+import { ERR_WEBHOOK, i18n, error } from './main.js'
 
 function withComponentsUrl(url) {
     const u = new URL(url);
