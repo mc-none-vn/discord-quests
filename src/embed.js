@@ -66,7 +66,7 @@ export async function buildQuestEmbed(content, quest, assets) {
     const CDN_BASE = 'https://cdn.discordapp.com/';
     const heroUrl = config.assets?.hero ? `${CDN_BASE}${config.assets.hero}` : assets.discordQuests;
     let currentRewardIconUrl = assets.rewardIconUrl;
-    if (!rewardName.toLowerCase().includes('orb')) currentRewardIconUrl = (CDN_BASE + primaryReward?.asset) || assets.emptyIconUrl;
+    if (!rewardName.toLowerCase().includes('orb')) currentRewardIconUrl = primaryReward?.asset ? (CDN_BASE + primaryReward.asset) : assets.emptyIconUrl;
     const currentRewardIcon = new URL(currentRewardIconUrl); currentRewardIcon.searchParams.append('format', 'webp');
 
     subComponents.push({
