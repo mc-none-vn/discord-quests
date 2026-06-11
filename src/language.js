@@ -1,5 +1,5 @@
 // ─── Language Pack Loader ─────────────────────────────────────────────────────
-import { LANG_FOLDER, LANG_FILE } from './main.js';
+import { LANG_FOLDER, LOCALE, warn } from './main.js';
 import path from 'path';
 import fs from 'fs';
 
