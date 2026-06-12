@@ -4,6 +4,7 @@
     "src": "← Main folder",
     "languages": "← Language config",
     "main.js": "← Main script",
+    ".env.example": "← For local hosting",
     "state.json": "← Atomic write",
     "THE_END": "--- --- --- --- --- END - THIS - FILE --- --- --- --- ---"
 }
