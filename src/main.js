@@ -1,39 +1,9 @@
 import { fetchQuests, buildQuestEmbed, i18n, log, warn, error, loadState, saveState, sendWebhook, sendErrorNotice } from './module.js';
+import { TOKEN, WEBHOOK, PING_ROLE, REPOSITORY, ERR_WEBHOOK, GITHUB_TOKEN } from './config.js';
 import { fileURLToPath } from 'url';
-import crypto from 'crypto';
-import path from 'path';
-import fs from 'fs';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.join(__dirname, '..');
-const STATE_FILE = path.join(ROOT, 'state.json');
-const STATE_TMP = path.join(ROOT, 'state.tmp.json');
-const LANG_FOLDER = path.join(__dirname, 'languages');
-export { __dirname, ROOT, STATE_FILE, STATE_TMP, LANG_FOLDER };
 
 // ─── CLI Args ─────────────────────────────────────────────────────────────────
-function parseArgs() {
-    const args = process.argv.slice(2);
-    const result = {};
-    for (let i = 0; i < args.length; i++) {
-        if (args[i].startsWith('--')) {
-            const key = args[i].slice(2);
-            result[key] = args[i + 1] ?? true;
-            i++;
-        }
-    }
-    return result;
-}
-
-const args = parseArgs();
-const TOKEN = args['token'];
-const WEBHOOK = args['webhook'];
-const PING_ROLE = args['ping-role'];
-const REPOSITORY = args['repository'];
-const ERR_WEBHOOK = args['error-webhook'];
-const GITHUB_TOKEN = args['github-token'];
-const LOCALE = args['locale'] || 'en-US';
-
 if (!TOKEN || !WEBHOOK || !GITHUB_TOKEN || !REPOSITORY) {
     console.error('❌  --token, --webhook, --github-token, --repository là bắt buộc.');
     process.exit(1);
@@ -67,7 +37,6 @@ const getAttachments = async (path) => {
         return null;
     }
 };
-export { args, TOKEN, WEBHOOK, PING_ROLE, REPOSITORY, ERR_WEBHOOK, GITHUB_TOKEN, LOCALE, getAttachments };
 
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
