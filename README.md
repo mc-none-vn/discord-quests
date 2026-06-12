@@ -33,7 +33,7 @@ discord-quests/
 │   ├── readmeSource.md
 │   ├── state.js
 │   └── webhook.js
-├── .env.example
+├── .env.example                  ← For local hosting
 ├── .gitignore
 ├── LICENSE
 ├── README.md
