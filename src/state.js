@@ -1,5 +1,6 @@
 // ─── State (atomic read/write) ────────────────────────────────────────────────
-import { STATE_FILE, STATE_TMP, warn } from './main.js';
+import { STATE_FILE, STATE_TMP } from './config.js';
+import { warn } from './logging.js';
 import fs from 'fs';
 
 export function loadState() {
