@@ -35,7 +35,6 @@ discord-quests/
 │   └── webhook.js
 ├── .env.example                  ← For local hosting
 ├── .gitignore
-├── LICENSE
 ├── README.md
 ├── package-lock.json
 ├── package.json
