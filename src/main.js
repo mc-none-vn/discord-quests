@@ -1,9 +1,8 @@
+// ─── Main ─────────────────────────────────────────────────────────────────────
 import { fetchQuests, buildQuestEmbed, i18n, log, warn, error, loadState, saveState, sendWebhook, sendErrorNotice } from './module.js';
 import { TOKEN, WEBHOOK, PING_ROLE, REPOSITORY, ERR_WEBHOOK, GITHUB_TOKEN } from './config.js';
 import { fileURLToPath } from 'url';
 
-
-// ─── CLI Args ─────────────────────────────────────────────────────────────────
 if (!TOKEN || !WEBHOOK || !GITHUB_TOKEN || !REPOSITORY) {
     console.error('❌  --token, --webhook, --github-token, --repository là bắt buộc.');
     process.exit(1);
@@ -38,8 +37,6 @@ const getAttachments = async (path) => {
     }
 };
 
-
-// ─── Main ─────────────────────────────────────────────────────────────────────
 async function main() {
     log('Đang kiểm tra quests...');
     const state = loadState();
