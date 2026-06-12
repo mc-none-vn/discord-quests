@@ -1,5 +1,5 @@
 // ─── Discord API ──────────────────────────────────────────────────────────────
-import { TOKEN } from './main.js';
+import { TOKEN } from './config.js';
 
 export async function fetchQuests() {
     const res = await fetch('https://discord.com/api/v9/quests/@me', {
