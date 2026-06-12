@@ -34,6 +34,7 @@ discord-quests/
 │   ├── state.js
 │   └── webhook.js
 ├── .env.example
+├── .gitignore
 ├── LICENSE
 ├── README.md
 ├── package-lock.json
