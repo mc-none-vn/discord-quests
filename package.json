@@ -1,5 +1,11 @@
 {
+  "type": "module",
+  "scripts": {
+    "start": "node src/main.js",
+    "update-readme": "node src/generateReadme.js"
+  },
   "dependencies": {
-    "directory-tree": "^3.6.0"
+    "directory-tree": "^3.6.0",
+    "dotenv": "^16.4.5"
   }
 }
