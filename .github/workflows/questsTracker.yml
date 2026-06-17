@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: quest-tracker
+  cancel-in-progress: false
+
 jobs:
   track:
     runs-on: ubuntu-latest
@@ -32,6 +36,7 @@ jobs:
           while [ $SECONDS -lt $END_TIME ]; do
             START_LOOP=$SECONDS
             echo "--- Khởi động chu kỳ fetch dữ liệu: $(date) ---"
+            git pull --rebase --autostash
 
             node src/main.js \
               --token "${{ secrets.DISCORD_TOKEN }}" \
@@ -48,8 +53,15 @@ jobs:
               if ! git diff --cached --quiet; then
                 echo "Phát hiện thay đổi ở state.json, đang tiến hành commit..."
                 git commit -m "chore: update quest state [skip ci]"
-                git pull --rebase
-                git push
+                for attempt in 1 2 3; do
+                  if git push; then
+                    echo "Push thành công."
+                    break
+                  fi
+                  echo "Push thất bại (lần $attempt/3), pull lại rồi thử tiếp..."
+                  git pull --rebase --autostash
+                  sleep 5
+                done
               else
                 echo "Không có thay đổi nào trong trạng thái Quest."
               fi
