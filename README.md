@@ -142,7 +142,7 @@ Special thanks to the following repository for inspiring this project:
 
 ---
 
-###### <footer><div align="center">© 2026 Mc's Team. All rights reserved.</div></footer>
+###### <footer><div align="center"> [© 2026 Mc's Team. All rights reserved.](?tab=AGPL-3.0-1-ov-file) </div></footer>
 
 <!-- README_VARIABLES -->
 [background]: https://raw.githubusercontent.com/mc-none-vn/discord-quests/refs/heads/assets/discordQuests.png
