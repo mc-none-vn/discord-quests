@@ -9,6 +9,8 @@ Automatically tracking Discord Quests then sending notifications to a webhook ev
 > [!WARNING]
 > **${{ github.repository.name }}** is a Discord Quests tracker developed solely for personal educational and monitoring purposes. To fetch current quests, thisproject requires your Discord user token to access Discord's internal API. Please note that using user tokens or self-bots violates Discord's Terms of Service and **may result in your account being permanently banned**. Use this software entirely at your own risk.
 
+---
+
 # <div align="left"><sub><img src="https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/assets/projectStructure.png" height="30"></sub> Project Structure </div>
 <!-- START_METADATA_DISCORD_QUEST_TREE -->
 ```
