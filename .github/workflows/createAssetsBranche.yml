@@ -10,20 +10,18 @@ jobs:
   create-branch:
     runs-on: ubuntu-latest
     steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: 🚀 Create Orphan Assets Branch
+      - name: 🚀 Initialize Blind Repository & Push
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"          
-          git checkout --orphan assets
-
-          git rm --cached -r .
-          rm -rf ./*
-          find . -maxdepth 1 -name ".*" ! -name "." ! -name ".." ! -name ".git" -exec rm -rf {} +
-
+          mkdir fresh-assets
+          cd fresh-assets
+          git init
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b assets
+          
           echo "This branch is dedicated to assets only." > README.md
           git add README.md
-          git commit -m "chore: initialize independent assets branch without source code"
+          git commit -m "chore: wipe out history and initialize pure independent assets branch"
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git push origin assets --force
