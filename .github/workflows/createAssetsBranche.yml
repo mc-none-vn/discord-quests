@@ -1,0 +1,25 @@
+name: Create Empty Branch
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🚀 Create Orphan Assets Branch
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan assets
+          git rm -rf .
+          echo "This branch is dedicated to assets only." > README.md          
+          git add README.md
+          git commit -m "chore: initialize independent assets branch without source code"
+          git push origin assets --force
