@@ -15,12 +15,13 @@ Automatically tracking Discord Quests then sending notifications to a webhook ev
 <!-- START_METADATA_DISCORD_QUEST_TREE -->
 ```
 discord-quests/
-├── .github/                      ← GitHub Actions config
+├── .github/                          ← GitHub Actions config
 │   └── workflows/
+│       ├── createAssetsBranche.yml
 │       ├── questsTracker.yml
 │       └── updateStructure.yml
-├── src/                          ← Main folder
-│   ├── languages/                ← Language config
+├── src/                              ← Main folder
+│   ├── languages/                    ← Language config
 │   │   ├── en-US.json
 │   │   └── vi-VN.json
 │   ├── config.js
@@ -29,19 +30,19 @@ discord-quests/
 │   ├── generateReadme.js
 │   ├── language.js
 │   ├── logging.js
-│   ├── main.js                   ← Main script
+│   ├── main.js                       ← Main script
 │   ├── module.js
 │   ├── readmeMap.json
 │   ├── readmeSource.md
 │   ├── state.js
 │   └── webhook.js
-├── .env.example                  ← For local hosting
+├── .env.example                      ← For local hosting
 ├── .gitignore
 ├── LICENSE
 ├── README.md
 ├── package-lock.json
 ├── package.json
-└── state.json                    ← Atomic write
+└── state.json                        ← Atomic write
 ```
 <!-- END_METADATA_DISCORD_QUEST_TREE -->
 
